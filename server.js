@@ -6,7 +6,7 @@ const GithubWebHook = require('express-github-webhook')
 const objectPath = require('object-path')
 
 class StaticmanAPI {
-  constructor () {
+  constructor (mode) {
     this.controllers = {
       connect: require('./controllers/connect'),
       encrypt: require('./controllers/encrypt'),
@@ -25,14 +25,16 @@ class StaticmanAPI {
 
     this.initialiseWebhookHandler()
     this.initialiseCORS()
-    this.initialiseBruteforceProtection()
+    this.initialiseBruteforceProtection(mode)
     this.initialiseRoutes()
   }
 
-  initialiseBruteforceProtection () {
+  initialiseBruteforceProtection (mode) {
     const store = new ExpressBrute.MemoryStore()
 
-    this.bruteforce = new ExpressBrute(store)
+    this.bruteforce = new ExpressBrute(store, mode === 'test-server' ? {
+      freeRetries: 100
+    } : {})
   }
 
   initialiseCORS () {

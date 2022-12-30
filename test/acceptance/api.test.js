@@ -12,7 +12,7 @@ const btoa = contents => Buffer.from(contents).toString('base64')
 let server
 
 beforeAll(done => {
-  server = new StaticmanAPI()
+  server = new StaticmanAPI('test-server')
 
   server.start(() => {})
 

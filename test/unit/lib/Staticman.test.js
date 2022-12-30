@@ -635,7 +635,7 @@ describe('Staticman interface', () => {
     })
   })
 
-  describe('authentication v2', async () => {
+  describe('authentication v2', () => {
     beforeEach(() => {
       mockConfig.set('githubAuth.required', true)
     })
