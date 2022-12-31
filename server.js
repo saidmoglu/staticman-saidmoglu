@@ -32,9 +32,7 @@ class StaticmanAPI {
   initialiseBruteforceProtection (mode) {
     const store = new ExpressBrute.MemoryStore()
 
-    this.bruteforce = new ExpressBrute(store, mode === 'test-server' ? {
-      freeRetries: 100
-    } : {})
+    this.bruteforce = new ExpressBrute(store, mode === 'test-server' ? { freeRetries: 100 } : {})
   }
 
   initialiseCORS () {
