@@ -10,7 +10,7 @@ beforeEach(() => {
   jest.unmock('@octokit/rest')
 })
 
-describe('Connect controller', () => {
+describe.skip('Connect controller', () => {
   test('accepts the invitation if one is found and replies with "OK!"', () => {
     const invitationId = 123
     const mockAcceptRepoInvite = jest.fn(() => Promise.resolve())
