@@ -170,7 +170,7 @@ describe('GitLab interface', () => {
 
     test('reads a YAML file and returns its parsed contents', () => {
       const filePath = 'path/to/file.yml'
-      const parsedConfig = yaml.safeLoad(sampleData.config1, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config1, 'utf8')
       const mockShowRepoFile = jest.fn(() => Promise.resolve({
         content: btoa(sampleData.config1)
       }))
@@ -199,7 +199,7 @@ describe('GitLab interface', () => {
     })
 
     test('reads a YAML file and returns its parsed and raw contents if `getFullResponse` is `true`', () => {
-      const parsedConfig = yaml.safeLoad(sampleData.config1, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config1, 'utf8')
       const fileContents = {
         content: btoa(sampleData.config1)
       }
@@ -229,7 +229,7 @@ describe('GitLab interface', () => {
 
     test('reads a JSON file and returns its parsed contents', () => {
       const filePath = 'path/to/file.json'
-      const parsedConfig = yaml.safeLoad(sampleData.config2, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config2, 'utf8')
       const mockShowRepoFile = jest.fn(() => Promise.resolve({
         content: btoa(sampleData.config2)
       }))
@@ -259,7 +259,7 @@ describe('GitLab interface', () => {
         content: btoa(sampleData.config2)
       }
       const filePath = 'path/to/file.json'
-      const parsedConfig = yaml.safeLoad(sampleData.config2, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config2, 'utf8')
       const mockShowRepoFile = jest.fn(() => Promise.resolve(fileContents))
 
       jest.mock('gitlab/dist/es5', () => {

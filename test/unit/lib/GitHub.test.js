@@ -72,7 +72,7 @@ describe('GitHub interface', () => {
   describe('readFile', () => {
     test('reads a file and returns its contents', async () => {
       const filePath = 'path/to/file.yml'
-      const parsedConfig = yaml.safeLoad(sampleData.config1, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config1, 'utf8')
 
       fetchMock.get({
         url: /api\.github\.com\/repos\/johndoe\/foobar\/contents\/path%2Fto%2Ffile\.yml/,
@@ -99,7 +99,7 @@ describe('GitHub interface', () => {
 
     test('returns an error if GitHub API call errors', async () => {
       const filePath = 'path/to/file.yml'
-      const parsedConfig = yaml.safeLoad(sampleData.config1, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config1, 'utf8')
 
       fetchMock.get({
         url: /api\.github\.com\/repos\/johndoe\/foobar\/contents\/path%2Fto%2Ffile\.yml/,
@@ -176,7 +176,7 @@ describe('GitHub interface', () => {
 
     test('reads a YAML file and returns its parsed contents', async () => {
       const filePath = 'path/to/file.yml'
-      const parsedConfig = yaml.safeLoad(sampleData.config1, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config1, 'utf8')
 
       fetchMock.get({
         url: /api\.github\.com\/repos\/johndoe\/foobar\/contents\/path%2Fto%2Ffile\.yml/,
@@ -202,7 +202,7 @@ describe('GitHub interface', () => {
     })
 
     test('reads a YAML file and returns its parsed and raw contents if `getFullResponse` is `true`', async () => {
-      const parsedConfig = yaml.safeLoad(sampleData.config1, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config1, 'utf8')
       const filePath = 'path/to/file.yml'
 
       fetchMock.get({
@@ -231,7 +231,7 @@ describe('GitHub interface', () => {
 
     test('reads a JSON file and returns its parsed contents', async () => {
       const filePath = 'path/to/file.json'
-      const parsedConfig = yaml.safeLoad(sampleData.config2, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config2, 'utf8')
 
       fetchMock.get({
         url: /api\.github\.com\/repos\/johndoe\/foobar\/contents\/path%2Fto%2Ffile\.json/,
@@ -262,7 +262,7 @@ describe('GitHub interface', () => {
         content: btoa(sampleData.config2)
       }
       const filePath = 'path/to/file.json'
-      const parsedConfig = yaml.safeLoad(sampleData.config2, 'utf8')
+      const parsedConfig = yaml.load(sampleData.config2, 'utf8')
 
       fetchMock.get({
         url: /api\.github\.com\/repos\/johndoe\/foobar\/contents\/path%2Fto%2Ffile\.json/,
