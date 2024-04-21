@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser')
 const config = require('./config')
 const express = require('express')
-const ExpressBrute = require('express-brute')
+const ExpressBruteFlexible = require('rate-limiter-flexible/lib/ExpressBruteFlexible')
 const GithubWebHook = require('express-github-webhook')
 const objectPath = require('object-path')
 
@@ -30,9 +30,10 @@ class StaticmanAPI {
   }
 
   initialiseBruteforceProtection (mode) {
-    const store = new ExpressBrute.MemoryStore()
-
-    this.bruteforce = new ExpressBrute(store, mode === 'test-server' ? { freeRetries: 100 } : {})
+    const opts = {
+      freeRetries: 5 // needed for unit tests
+    }
+    this.bruteforce = new ExpressBruteFlexible(ExpressBruteFlexible.LIMITER_TYPES.MEMORY, opts)
   }
 
   initialiseCORS () {
