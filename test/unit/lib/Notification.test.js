@@ -2,7 +2,7 @@ const config = require('./../../../config')
 const mockHelpers = require('./../../helpers')
 const Notification = require('./../../../lib/Notification')
 
-const mockCreateFn = jest.fn()
+const mockCreateFn = jest.fn(() => Promise.resolve("mocked success"))
 const mockMessages = {
   create: mockCreateFn
 }
