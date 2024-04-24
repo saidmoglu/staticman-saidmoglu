@@ -11,7 +11,7 @@
     "debug": "nodemon --inspect index.js"
   },
   "engines": {
-    "node": ">=12.18.1"
+    "node": ">=18.20.2"
   },
   "repository": {
     "type": "git",
