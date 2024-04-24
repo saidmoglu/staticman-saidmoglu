@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/eduardoboucas/staticman#readme",
   "dependencies": {
-    "@dadi/logger": "^1.5.0",
+    "@dadi/logger": "^1.4.3",
     "@gitbeaker/rest": "^40.0.3",
     "@octokit/auth-app": "^4.0.7",
     "@octokit/request": "^6.2.2",
