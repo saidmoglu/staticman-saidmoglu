@@ -303,7 +303,7 @@ describe('Auth controller', () => {
       })
         .get('/api/v4/user')
         .reply(401, {
-          message: '401 Unauthorized'
+          message: 'Unauthorized'
         })
 
       const reqWithQuery = Object.assign({}, req, {
@@ -318,7 +318,7 @@ describe('Auth controller', () => {
       return auth(reqWithQuery, res).then(result => {
         expect(res.status.mock.calls[0][0]).toBe(401)
         expect(res.send.mock.calls[0][0].statusCode).toBe(401)
-        expect(res.send.mock.calls[0][0].message).toContain('401 Unauthorized')
+        expect(res.send.mock.calls[0][0].message).toContain('Unauthorized')
       })
     })
   })
