@@ -4,9 +4,11 @@ const express = require('express')
 const ExpressBrute = require('express-brute')
 const GithubWebHook = require('express-github-webhook')
 const objectPath = require('object-path')
+const logger = require('./lib/Logger')
+const https = require('https')
 
 class StaticmanAPI {
-  constructor () {
+  constructor() {
     this.controllers = {
       connect: require('./controllers/connect'),
       encrypt: require('./controllers/encrypt'),
@@ -17,10 +19,25 @@ class StaticmanAPI {
     }
 
     this.server = express()
+
+    // Add request logging middleware before other middleware
+    this.server.use((req, res, next) => {
+      const logData = {
+        method: req.method,
+        path: req.path,
+        params: req.params,
+        query: req.query,
+        ip: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        userAgent: req.headers['user-agent']
+      }
+
+      logger.info(`Incoming request: ${JSON.stringify(logData)}`)
+      next()
+    })
+
     this.server.use(bodyParser.json())
     this.server.use(bodyParser.urlencoded({
       extended: true
-      // type: '*'
     }))
 
     this.initialiseWebhookHandler()
@@ -29,13 +46,13 @@ class StaticmanAPI {
     this.initialiseRoutes()
   }
 
-  initialiseBruteforceProtection () {
+  initialiseBruteforceProtection() {
     const store = new ExpressBrute.MemoryStore()
 
     this.bruteforce = new ExpressBrute(store)
   }
 
-  initialiseCORS () {
+  initialiseCORS() {
     this.server.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*')
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -44,7 +61,7 @@ class StaticmanAPI {
     })
   }
 
-  initialiseRoutes () {
+  initialiseRoutes() {
     // Route: connect
     this.server.get(
       '/v:version/connect/:username/:repository',
@@ -103,7 +120,7 @@ class StaticmanAPI {
     )
   }
 
-  initialiseWebhookHandler () {
+  initialiseWebhookHandler() {
     const webhookHandler = GithubWebHook({
       path: '/v1/webhook'
     })
@@ -113,7 +130,7 @@ class StaticmanAPI {
     this.server.use(webhookHandler)
   }
 
-  requireApiVersion (versions) {
+  requireApiVersion(versions) {
     return (req, res, next) => {
       const versionMatch = versions.some(version => {
         return version.toString() === req.params.version
@@ -130,7 +147,7 @@ class StaticmanAPI {
     }
   }
 
-  requireService (services) {
+  requireService(services) {
     return (req, res, next) => {
       const serviceMatch = services.some(service => service === req.params.service)
 
@@ -145,7 +162,7 @@ class StaticmanAPI {
     }
   }
 
-  requireParams (params) {
+  requireParams(params) {
     return function (req, res, next) {
       let missingParams = []
 
@@ -170,15 +187,31 @@ class StaticmanAPI {
     }
   }
 
-  start (callback) {
+  setupPinger() {
+    const PING_INTERVAL = 10 * 60 * 1000; // 10 minutes in milliseconds
+    const BACKEND_URL = 'https://staticman-saidmoglu.onrender.com';
+
+    setInterval(() => {
+      https.get(BACKEND_URL, (resp) => {
+        logger.info(`Self-ping performed. Status: ${resp.statusCode}`);
+      }).on('error', (err) => {
+        logger.info(`Self-ping failed: ${err.message}`);
+      });
+    }, PING_INTERVAL);
+
+    logger.info('Self-ping mechanism initialized');
+  }
+
+  start(callback) {
     this.instance = this.server.listen(config.get('port'), () => {
+      this.setupPinger(); // Initialize the self-ping mechanism
       if (typeof callback === 'function') {
         callback(config.get('port'))
       }
     })
   }
 
-  close () {
+  close() {
     this.instance.close()
   }
 }
